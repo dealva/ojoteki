@@ -11,10 +11,11 @@ export default function UserOrdersView() {
 
     const handleRetry = async (orderId) => {
     try {
+        
         const res = await fetch(`/api/orders/${orderId}/retry`, {
         method: 'PATCH',
         });
-
+        
         const data = await res.json();
 
         if (!res.ok) throw new Error(data.error || 'Failed to retry payment');

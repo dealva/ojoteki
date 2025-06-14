@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createSignature } from '@/lib/midtrans';
-import { query } from '@/lib/db';  // Your postgres helper
+import { query } from '@/lib/db';  
 
 export async function POST(request) {
   try {
@@ -14,12 +14,13 @@ export async function POST(request) {
       fraud_status,
       signature_key,
     } = body;
-    
+    console.log('Received Midtrans notification:', body);
     // Verify signature
     const expectedSignature = createSignature(order_id, status_code, gross_amount);
     if (expectedSignature !== signature_key) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
+    console.log('Signature verified successfully' , order_id);
 
     // Map Midtrans status to internal status values
     let orderStatus = null;
@@ -29,7 +30,7 @@ export async function POST(request) {
     switch (transaction_status) {
       case 'capture':
         if (fraud_status === 'challenge') {
-          orderStatus = 'pending';
+          orderStatus = '';
           transactionStatus = 'pending';
         } else if (fraud_status === 'accept') {
           orderStatus = 'confirmed';

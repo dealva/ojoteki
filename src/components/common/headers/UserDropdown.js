@@ -52,7 +52,14 @@ export default function UserDropdown({
             </span>
           )}
         </button>
-
+          <button
+          disabled={isAdmin}
+          className={`w-full text-left py-2 px-3 rounded-md mt-2 font-medium transition
+            ${isAdmin ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'hover:bg-[#F5D7D7]'}`}
+          onClick={() => !isAdmin && router.push('/orders')}
+        >
+          Pemesanan
+        </button>
         <button
           disabled={isAdmin}
           className={`w-full text-left py-2 px-3 rounded-md mt-2 font-medium transition
