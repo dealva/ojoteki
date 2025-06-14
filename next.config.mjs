@@ -9,6 +9,7 @@ const ContentSecurityPolicy = `
   frame-src https://app.sandbox.midtrans.com https://www.google.com;
 `.replace(/\n/g, ' ').trim();
 
+
 const nextConfig = {
   images: {
     domains: ['res.cloudinary.com'],
