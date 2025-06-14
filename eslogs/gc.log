@@ -3354,3 +3354,4 @@
 [2025-06-14T01:29:25.721+0000][72][info ][safepoint   ] Safepoint "Cleanup", Time since last: 279894928632 ns, Reaching safepoint: 39882 ns, Cleanup: 20958 ns, At safepoint: 19016 ns, Total: 79856 ns
 [2025-06-14T01:29:30.619+0000][72][info ][safepoint   ] Safepoint "Cleanup", Time since last: 4897569038 ns, Reaching safepoint: 15130 ns, Cleanup: 110231 ns, At safepoint: 84567 ns, Total: 209928 ns
 [2025-06-14T01:29:54.819+0000][72][info ][safepoint   ] Safepoint "Cleanup", Time since last: 24202743963 ns, Reaching safepoint: 64847 ns, Cleanup: 17766 ns, At safepoint: 12131 ns, Total: 94744 ns
+[2025-06-14T01:31:18.965+0000][72][info ][safepoint   ] Safepoint "Cleanup", Time since last: 84153159873 ns, Reaching safepoint: 68208 ns, Cleanup: 16034 ns, At safepoint: 16755 ns, Total: 100997 ns
