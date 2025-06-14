@@ -39,8 +39,8 @@
 
 // cron/trackShipments.js
 require('dotenv').config();
-const { query } = require('../src/lib/db');
-const RajaOngkir = require('../src/lib/rajaongkir').default;
+const { query } = require('./db');
+const RajaOngkir = require('./rajaongkir');
 
 async function trackShipments() {
   console.log(`[${new Date().toISOString()}] Running shipment tracking task...`);
