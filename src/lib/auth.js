@@ -138,5 +138,5 @@ export const authOptions = {
   },
 
   secret: process.env.ECOM_NEXTAUTH_SECRET,
-  url: process.env.ECOM_NEXTAUTH_URL,
+  url: process.env.NEXTAUTH_URL,
 };
