@@ -1,0 +1,1 @@
+// GET all or POST new product (Admin only for POST)

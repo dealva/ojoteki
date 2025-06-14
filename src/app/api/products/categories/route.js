@@ -1,0 +1,1 @@
+// GET all or POST new categories

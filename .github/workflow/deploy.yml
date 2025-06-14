@@ -1,0 +1,58 @@
+# name: Deploy
+
+# on:
+#   push:
+#     branches:
+#       - master
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     services:
+#       postgres:
+#         image: postgres:15
+#         ports:
+#           - 5432:5432
+#         env:
+#           POSTGRES_DB: ecom_db
+#           POSTGRES_USER: ecom_db_user
+#           POSTGRES_PASSWORD: ecom_db_pass
+#         options: >-
+#           --health-cmd="pg_isready"
+#           --health-interval=10s
+#           --health-timeout=5s
+#           --health-retries=5
+
+#     env:
+#       ECOM_POSTGRES_HOST: localhost
+#       ECOM_POSTGRES_PORT: 5432
+#       ECOM_POSTGRES_DATABASE: ecom_db
+#       ECOM_POSTGRES_USER: ecom_db_user
+#       ECOM_POSTGRES_PASSWORD: ecom_db_pass
+
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Wait for PostgreSQL
+#         run: sleep 20
+
+#       - name: Initialize DB from init.sql
+#         run: |
+#           PGPASSWORD=$ECOM_POSTGRES_PASSWORD psql \
+#             -h 127.0.0.1 \
+#             -U $ECOM_POSTGRES_USER \
+#             -d $ECOM_POSTGRES_DATABASE \
+#             -f init.sql
+
+#       - name: Run cron job (track shipments)
+#         run: node cron/trackShipments.js

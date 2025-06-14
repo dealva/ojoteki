@@ -1,0 +1,92 @@
+
+
+services:
+  ecom-db:
+    image: postgres:16
+    container_name: ecom-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${ECOM_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${ECOM_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${ECOM_POSTGRES_DATABASE}
+    ports:
+      - "${ECOM_POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - ecom-db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  ecom-redis:
+    image: redis:latest
+    container_name: ecom-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - .docker/redis:/data
+
+  ecom-prometheus:
+    image: prom/prometheus
+    container_name: ecom-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command: 
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+  ecom-node-exporter:
+    image: prom/node-exporter
+    container_name: ecom-node-exporter
+    ports:
+      - "9100:9100"
+
+  ecom-grafana:
+    image: grafana/grafana
+    container_name: ecom-grafana
+    ports:
+      - "3100:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ECOM_GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${ECOM_GRAFANA_ADMIN_PASSWORD}
+
+  ecom-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: ecom-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - ecom-esdata:/usr/share/elasticsearch/data
+      - ./eslogs:/usr/share/elasticsearch/logs
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ecom-logstash:
+    image: docker.elastic.co/logstash/logstash:8.13.0
+    container_name: ecom-logstash
+    ports:
+      - "5100:5000"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs:/usr/share/logstash/logs
+    depends_on:
+      - ecom-elasticsearch
+
+  ecom-kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.0
+    container_name: ecom-kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://ecom-elasticsearch:9200
+    depends_on:
+      - ecom-elasticsearch
+
+volumes:
+  ecom-db_data:
+  ecom-esdata:
